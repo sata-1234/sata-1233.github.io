@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ダークモード切替トグル（リンク・見出し対応版）</title>
+<style>
+  body {
+    background-color: #fff;
+    color: #000;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    padding: 20px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  a {
+    color: #0066cc;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  a:hover, a:focus {
+    text-decoration: underline;
+  }
+  h1, h2 {
+    color: #222;
+    transition: color 0.3s ease;
+  }
+  .satasana-djdjdj {
+    color: #555;
+    font-weight: 600;
+    transition: color 0.3s ease;
+  }
+
+  /* ダークモード */
+  body.dark-mode {
+    background-color: #121212;
+    color: #eee;
+  }
+  body.dark-mode a {
+    color: #66aaff;
+  }
+  body.dark-mode h1, body.dark-mode h2 {
+    color: #ddd;
+  }
+  body.dark-mode .satasana-djdjdj {
+    color: #aaa;
+  }
+
+  /* トグルスイッチ */
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 52px;
+    height: 28px;
+    margin-right: 10px;
+  }
+  .switch input {
+    opacity: 0; width: 0; height: 0;
+  }
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ccc;
+    border-radius: 28px;
+    transition: background-color 0.4s;
+  }
+  .toggle-thumb {
+    position: absolute;
+    top: 3px; left: 3px;
+    width: 22px; height: 22px;
+    background-color: white;
+    border-radius: 50%;
+    transition: left 0.4s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 4px rgba(0,0,0,0.3);
+  }
+  .toggle-thumb svg {
+    width: 14px; height: 14px;
+    fill: #999;
+    transition: fill 0.4s, filter 0.4s;
+    filter: drop-shadow(0 0 0 transparent);
+  }
+  input:checked + .slider {
+    background-color: #4caf50;
+  }
+  input:checked + .slider + .toggle-thumb {
+    left: 27px;
+  }
+  input:checked + .slider + .toggle-thumb svg {
+    fill: #ffeb3b;
+    filter: drop-shadow(0 0 6px #ffeb3b);
+  }
+  label {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-size: 1rem;
+  }
+</style>
+</head>
+<body>
+
+<label for="dark-toggle" aria-label="ダークモード切替">
+  <div class="switch">
+    <input type="checkbox" id="dark-toggle" />
+    <span class="slider"></span>
+    <span class="toggle-thumb" aria-hidden="true">
+      <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+        <path d="M9 21h6v-1H9v1zm3-20C7.48 1 4 4.48 4 8.5c0 2.38 1.47 4.44 3.5 5.41V16h7v-2.09c2.03-.97 3.5-3.03 3.5-5.41C20 4.48 16.52 1 12 1z"/>
+      </svg>
+    </span>
+  </div>
+  ダークモード
+</label>
+
+<h1>タイトル見出し1</h1>
+<h2>タイトル見出し2</h2>
+<p>これは普通の段落テキストです。<a href="#">リンクテキスト</a>もあります。</p>
+<p class="satasana-djdjdj">クラス名 <code>.satasana-djdjdj</code> のテキストです。</p>
+
+<script>
+  const darkToggle = document.getElementById('dark-toggle');
+  const darkKey = 'dark-mode-enabled';
+  const storedDark = localStorage.getItem(darkKey);
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  function updateDarkMode(enabled) {
+    if (enabled) {
+      document.body.classList.add('dark-mode');
+      darkToggle.checked = true;
+    } else {
+      document.body.classList.remove('dark-mode');
+      darkToggle.checked = false;
+    }
+  }
+
+  if (storedDark === 'true') {
+    updateDarkMode(true);
+  } else if (storedDark === null && prefersDark) {
+    updateDarkMode(true);
+  } else {
+    updateDarkMode(false);
+  }
+
+  darkToggle.addEventListener('change', () => {
+    updateDarkMode(darkToggle.checked);
+    localStorage.setItem(darkKey, darkToggle.checked);
+  });
+</script>
+
+</body>
+</html>
